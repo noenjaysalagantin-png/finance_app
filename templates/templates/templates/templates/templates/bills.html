@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Bills</h2>
+<form method="POST">
+  <input name="name" placeholder="Bill name" required>
+  <input name="category" placeholder="Category">
+  <input type="number" name="amount" placeholder="Amount" required>
+  <input type="date" name="due" required>
+  <button>Add</button>
+</form>
+<table>
+<tr><th>Name</th><th>Category</th><th>Amount</th><th>Due</th><th>Status</th></tr>
+{% for r in rows %}
+<tr class="{% if r.due_soon %}due-soon{% endif %}">
+<td>{{r.name}}</td><td>{{r.category}}</td><td>₱{{r.amount}}</td><td>{{r.due_date}}</td><td>{{r.status}}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
