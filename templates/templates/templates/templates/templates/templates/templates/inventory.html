@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Inventory</h2>
+<form method="POST">
+  <input name="sku" placeholder="SKU" required>
+  <input name="name" placeholder="Item Name" required>
+  <input name="category" placeholder="Category">
+  <input type="number" name="bq" placeholder="Begin Qty" required>
+  <input type="number" name="pq" placeholder="Purchased" required>
+  <input type="number" name="sq" placeholder="Sold" required>
+  <input type="number" name="cost" placeholder="Cost" required>
+  <input type="number" name="price" placeholder="Price" required>
+  <button>Add</button>
+</form>
+<table>
+<tr><th>SKU</th><th>Item</th><th>Ending Qty</th><th>Cost</th><th>Price</th></tr>
+{% for r in rows %}
+<tr>
+<td>{{r.sku}}</td><td>{{r.item_name}}</td><td>{{r.ending_qty}}</td><td>₱{{r.cost}}</td><td>₱{{r.price}}</td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
