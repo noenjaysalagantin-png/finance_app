@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Expenses</h2>
+<form method="POST">
+  <input type="date" name="date" required>
+  <input name="category" placeholder="Category" required>
+  <input type="number" name="amount" placeholder="Amount" required>
+  <input name="payment" placeholder="Payment">
+  <input name="notes" placeholder="Notes">
+  <button>Add</button>
+</form>
+<table>
+<tr><th>Date</th><th>Category</th><th>Amount</th><th>Payment</th><th>Notes</th></tr>
+{% for r in rows %}
+<tr><td>{{r.date}}</td><td>{{r.category}}</td><td>₱{{r.amount}}</td><td>{{r.payment_method}}</td><td>{{r.notes}}</td></tr>
+{% endfor %}
+</table>
+{% endblock %}
