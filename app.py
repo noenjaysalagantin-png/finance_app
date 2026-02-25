@@ -1,13 +1,72 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 from datetime import date, timedelta
+import os
 
 app = Flask(__name__)
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "finance.db")
+
 def db():
-    conn = sqlite3.connect("finance.db")
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
+
+def init_db_if_needed():
+    if not os.path.exists(DB_PATH):
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.executescript("""
+        CREATE TABLE IF NOT EXISTS expenses (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          date TEXT,
+          category TEXT,
+          amount REAL,
+          payment_method TEXT,
+          notes TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS sales (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          date TEXT,
+          description TEXT,
+          amount REAL,
+          type TEXT,
+          notes TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS bills (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT,
+          category TEXT,
+          amount REAL,
+          due_date TEXT,
+          status TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS budgets (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          category TEXT UNIQUE,
+          monthly_budget REAL
+        );
+
+        CREATE TABLE IF NOT EXISTS inventory (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          sku TEXT,
+          item_name TEXT,
+          category TEXT,
+          beginning_qty INTEGER,
+          purchased_qty INTEGER,
+          sold_qty INTEGER,
+          cost REAL,
+          price REAL
+        );
+        """)
+        conn.commit()
+        conn.close()
+
+init_db_if_needed()
 
 @app.route("/")
 def dashboard():
